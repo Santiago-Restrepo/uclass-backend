@@ -1,6 +1,6 @@
 const client = require("../clients/postgre");
 const boom = require('@hapi/boom');
-class StudentService {
+class StudentController {
     constructor() {
         this.client = client;
     }
@@ -47,4 +47,4 @@ class StudentService {
     }
 }
 
-module.exports = new StudentService();
+module.exports = new StudentController();

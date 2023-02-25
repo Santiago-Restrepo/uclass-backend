@@ -1,6 +1,6 @@
-const { client } = require("./student.service");
+const { client } = require("./student.controller");
 
-class TeacherService {
+class TeacherController {
     constructor() {
         this.client = client;
     }
@@ -43,4 +43,4 @@ class TeacherService {
     }
 }
 
-module.exports = new TeacherService();
+module.exports = new TeacherController();

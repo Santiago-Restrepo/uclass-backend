@@ -1,6 +1,6 @@
 const client = require("../clients/postgre");
 
-class ReviewService {
+class ReviewController {
     async create(review) {
         const { rows } = await client.query(
         "INSERT INTO reviews (subject_id, student_id, teacher_id, review) VALUES ($1, $2, $3, $4) RETURNING *",
@@ -44,4 +44,4 @@ class ReviewService {
     }
 }
 
-module.exports = new ReviewService();
+module.exports = new ReviewController();

@@ -1,6 +1,6 @@
 const client = require("../clients/postgre");
 
-class CommentService {
+class CommentController {
     async create(comment) {
         const { rows } = await client.query(
         "INSERT INTO comments (text, student_id, teacher_id, subject_id) VALUES ($1, $2, $3, $4) RETURNING *",
@@ -44,4 +44,4 @@ class CommentService {
     }
 }
 
-module.exports = new CommentService();
+module.exports = new CommentController();

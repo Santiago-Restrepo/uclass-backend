@@ -1,6 +1,6 @@
 const client = require("../clients/postgre");
 
-class ResourceService {
+class ResourceController {
     constructor() {
         this.client = client;
     }
@@ -43,4 +43,4 @@ class ResourceService {
     }
 }
 
-module.exports = new ResourceService();
+module.exports = new ResourceController();

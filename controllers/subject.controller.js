@@ -1,6 +1,6 @@
-const { client } = require("./student.service");
+const { client } = require("../clients/postgre");
 
-class SubjectService {
+class SubjectController {
     constructor() {
         this.client = client;
     }
@@ -43,4 +43,4 @@ class SubjectService {
     }
 }
 
-module.exports = new SubjectService();
+module.exports = new SubjectController();

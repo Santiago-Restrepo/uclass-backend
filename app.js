@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 const {config} = require("dotenv");
+const pkg = require('./package.json');
 config();
 var bodyParser = require('body-parser')
 //Routes
@@ -31,7 +32,12 @@ app.use(morgan('dev')); //Mostrar las peticiones que van llegando por consola
 
 //routes
 app.get("/", (req, res) => {
-    res.json({ response: "Welcome to the best fucking project in the world" });
+    res.json({
+        name: pkg.name,
+        author: pkg.author,
+        description: pkg.description,
+        version: pkg.version
+    }); 
 });
 app.use('/api/comments', commentRoutes);
 app.use('/api/resources', resourceRoutes);
