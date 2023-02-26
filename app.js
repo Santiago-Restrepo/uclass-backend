@@ -6,6 +6,7 @@ const pkg = require('./package.json');
 config();
 var bodyParser = require('body-parser')
 //Routes
+const authRoutes = require('./routes/auth.routes')
 const commentRoutes = require('./routes/comment.routes')
 const resourceRoutes = require('./routes/resource.routes')
 const reviewRoutes = require('./routes/review.routes')
@@ -39,6 +40,7 @@ app.get("/", (req, res) => {
         version: pkg.version
     }); 
 });
+app.use('/api/auth', authRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/resources', resourceRoutes);
 app.use('/api/reviews', reviewRoutes);
