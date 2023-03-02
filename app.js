@@ -3,6 +3,7 @@ const cors = require('cors')
 const morgan = require('morgan')
 const {config} = require("dotenv");
 const pkg = require('./package.json');
+// require('./services/google');
 config();
 var bodyParser = require('body-parser')
 //Routes
@@ -47,7 +48,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/students', studentRoutes);
 app.use('/api/subjects', subjectRoutes);
 app.use('/api/teachers', teacherRoutes);
-// app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 // app.use('/api/users', userRoutes);
 
 //middlewares
