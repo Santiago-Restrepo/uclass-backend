@@ -2,6 +2,8 @@ const User = require("../models/User");
 const passport = require("passport");
 const boom = require('@hapi/boom');
 const jwt = require("jsonwebtoken");
+const {config} = require("dotenv");
+config();
 class AuthController{
     constructor(){
     }
@@ -27,17 +29,17 @@ class AuthController{
     signIn(req, res){
         // do something
     }
-    async googleLogin(req, res){
-        console.log(req.user);
-        if(!req.user){
+    async googleLogin(user){
+        
+        if(!user){
             throw boom.unauthorized("User not found");
         }
-        const {email} = req.user;
-        const user = await User.findOne({email});
-        const token = jwt.sign({id: user._id}, process.env.SECRET, {
+        const {email} = user;
+        const userFound = await User.findOne({email});
+        const token = jwt.sign({id: userFound._id}, process.env.JWT_SECRET, {
             expiresIn: 60 * 60 * 24
         });
-        res.status(200).json({token});
+        return token;
     }
 
 

@@ -2,8 +2,9 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 const {config} = require("dotenv");
+const cookieSession = require('cookie-session');
 const pkg = require('./package.json');
-// require('./services/google');
+require('./middlewares/google');
 config();
 var bodyParser = require('body-parser')
 //Routes
@@ -14,6 +15,7 @@ const reviewRoutes = require('./routes/review.routes')
 const studentRoutes = require('./routes/student.routes')
 const subjectRoutes = require('./routes/subject.routes')
 const teacherRoutes = require('./routes/teacher.routes');
+const userRoutes = require('./routes/user.routes');
 const { logErrors, boomErrorHandler, errorHandler } = require('./middlewares/error.handler');
 // const authRoutes = require('./routes/auth.routes')
 // const userRoutes = require('./routes/user.routes')
@@ -24,6 +26,11 @@ const app = express();
 app.set("port", process.env.PORT || 3000);
 
 //middlewares
+app.use(cookieSession({
+    name: 'session',
+    keys: ['uclass'],
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}));
 const corsOptions = {};
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -48,7 +55,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/students', studentRoutes);
 app.use('/api/subjects', subjectRoutes);
 app.use('/api/teachers', teacherRoutes);
-app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 // app.use('/api/users', userRoutes);
 
 //middlewares
