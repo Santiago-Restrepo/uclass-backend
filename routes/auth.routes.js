@@ -2,8 +2,18 @@ const {Router} = require("express");
 const authController = require("../controllers/auth.controller");
 const passport = require("passport");
 const router = Router();
-router.post("/signup", (req, res) => {
-    res.send("signup");
+router.post("/signup", async (req, res, next) => {
+    try {
+        const {user} = req.body;
+        const token = await authController.signUp(user);
+        res.status(201).json({
+            data: token,
+            message: "user created"
+        });
+    } catch (error) {
+        console.log("here")
+        next(error);
+    }
 });
 
 router.post("/signin", (req, res) => {

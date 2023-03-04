@@ -7,27 +7,49 @@ config();
 class AuthController{
     constructor(){
     }
-    login(req, res){
-        
-        const {email, password} = req.body;
-        if(!email || !password){
-            throw boom.badRequest("Email and password are required");
-        }
-        passport.authenticate("local", (err, user) => {
-            if(err){
-                throw boom.unauthorized(err);
-            }
-            req.login(user, {session: false}, (err) => {
-                if(err){
-                    throw boom.unauthorized(err);
-                }
-                const token = user.generateToken();
-                res.status(200).json({token});
-            })
-        })(req, res);
+    jwtSignUser(user){
+        const ONE_WEEK = 60 * 60 * 24 * 7;
+        return jwt.sign(user, process.env.JWT_SECRET, {
+            expiresIn: ONE_WEEK
+        });
     }
-    signIn(req, res){
-        // do something
+    async signUp(user){
+        if(!user){
+            throw boom.badRequest("User not found");
+        }
+        const {name, email, password, repeatPassword} = user;
+        if(!name || !email || !password || !repeatPassword) {
+            console.log(name, email, password, repeatPassword);
+            throw boom.badRequest("All fields are required");
+        }
+        if(password !== repeatPassword){
+            throw boom.badRequest("Passwords don't match");
+        }
+        const existingUser = await User.findOne({email});
+        if(existingUser){
+            throw boom.badRequest("User already exists");
+        }
+        //encrypt password
+        const newUser = new User(user);
+        await newUser.save();
+        return this.jwtSignUser(newUser.toJSON());
+    }
+    async signIn(user){
+        if(!user){
+            throw boom.badRequest("User not found");
+        }
+        const {email, password} = user;
+        if(!email || !password){
+            throw boom.badRequest("All fields are required");
+        }
+
+        const userFound = await User.findOne({email});
+        if(!userFound){
+            throw boom.badRequest("User not found");
+        }
+        //De
+
+
     }
     async googleLogin(user){
         
