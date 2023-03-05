@@ -1,7 +1,7 @@
 const User = require("../models/User");
-const passport = require("passport");
 const boom = require('@hapi/boom');
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 const {config} = require("dotenv");
 config();
 class AuthController{
@@ -30,10 +30,32 @@ class AuthController{
             throw boom.badRequest("User already exists");
         }
         //encrypt password
-        const newUser = new User(user);
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(password, salt);
+        const newUser = new User({
+            name,
+            email,
+            password: hash
+        });
         await newUser.save();
-        return this.jwtSignUser(newUser.toJSON());
+        const token = this.jwtSignUser({
+            id: newUser._id,
+            name: newUser.name,
+            email: newUser.email
+        });
+        return token;
     }
+    async compareAsync(password, hash){
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(password, hash, (err, isMatch) => {
+                if(err){
+                    reject(err);
+                }
+                resolve(isMatch);
+            });
+        });
+    }
+
     async signIn(user){
         if(!user){
             throw boom.badRequest("User not found");
@@ -47,12 +69,18 @@ class AuthController{
         if(!userFound){
             throw boom.badRequest("User not found");
         }
-        //De
-
-
+        const isMatch = await this.compareAsync(password, userFound.password);
+        if(!isMatch){
+            throw boom.badRequest("Invalid credentials");
+        }
+        const token = this.jwtSignUser({
+            id: userFound._id,
+            name: userFound.name,
+            email: userFound.email
+        });
+        return token;
     }
     async googleLogin(user){
-        
         if(!user){
             throw boom.unauthorized("User not found");
         }

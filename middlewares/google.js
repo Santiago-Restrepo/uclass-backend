@@ -14,6 +14,10 @@ passport.use(new GoogleStrategy({
         const email = profile.emails[0].value;
         const name = profile.displayName;
         const photo = profile.photos[0].value;
+        //Only let users with @elpoli.edu.co email
+        if(!email.includes("@elpoli.edu.co")){
+            return done(null, false, {message: "Only @elpoli.edu.co emails are allowed"});
+        }
         //Find user in mongo by googleId
         const googleUser = await User.findOne({googleId});
         if(!googleUser){
