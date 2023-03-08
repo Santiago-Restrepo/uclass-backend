@@ -3,9 +3,20 @@ const boom = require('@hapi/boom');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const {config} = require("dotenv");
+const Role = require("../models/Role");
 config();
 class AuthController{
     constructor(){
+        this.roles = [];
+
+        this.getRoles().then(roles => {
+            this.roles = roles;
+        });
+    }
+
+    async getRoles(){
+        const roles = await Role.find();
+        return roles;
     }
     jwtSignUser(user){
         const ONE_WEEK = 60 * 60 * 24 * 7;
@@ -32,10 +43,12 @@ class AuthController{
         //encrypt password
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(password, salt);
+        const userRoleId = this.roles.find(role => role.name === "user")._id;
         const newUser = new User({
             name,
             email,
-            password: hash
+            password: hash,
+            roles: [userRoleId]
         });
         await newUser.save();
         const token = this.jwtSignUser({

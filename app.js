@@ -4,7 +4,7 @@ const morgan = require('morgan')
 const {config} = require("dotenv");
 const cookieSession = require('cookie-session');
 const pkg = require('./package.json');
-require('./middlewares/google');
+require('./middlewares/google.handler');
 config();
 var bodyParser = require('body-parser')
 //Routes

@@ -1,45 +1,47 @@
-const { client } = require("./student.controller");
-
+const Teacher = require("../models/Teacher");
 class TeacherController {
     constructor() {
-        this.client = client;
+        
     }
     
     async getAll() {
-        const { rows } = await this.client.query("SELECT * FROM teachers");
-        return rows;
+        const teachers = await Teacher.find({});
+        return teachers;
     }
     
     async getOne(id) {
-        const { rows } = await this.client.query(
-        "SELECT * FROM teachers WHERE id = $1",
-        [id]
-        );
-        return rows[0];
+        if(!id) throw new Error("Id not found");
+        const teacher = await Teacher.findById(id);
+        return teacher;
     }
     
-    async create(name, email) {
-        const { rows } = await this.client.query(
-        "INSERT INTO teachers (name, email) VALUES ($1, $2) RETURNING *",
-        [name, email]
-        );
-        return rows[0];
+    async create(body) {
+        const {name, rating} = body;
+        const teacher = new Teacher({
+            name,
+            rating
+        });
+        await teacher.save();
+        return teacher;
     }
     
-    async update(id, name, email) {
-        const { rows } = await this.client.query(
-        "UPDATE teachers SET name = $1, email = $2 WHERE id = $3 RETURNING *",
-        [name, email, id]
-        );
-        return rows[0];
+    async update(id, body) {
+        const {
+            name,
+            rating
+        } = body;
+        const teacher = await Teacher.findByIdAndUpdate(id, {
+            name,
+            rating
+        }, {
+            new: true
+        });
+        return teacher;
     }
     
     async delete(id) {
-        const { rows } = await this.client.query(
-        "DELETE FROM teachers WHERE id = $1 RETURNING *",
-        [id]
-        );
-        return rows[0];
+        const teacher = await Teacher.findByIdAndDelete(id);
+        return teacher;
     }
 }
 
