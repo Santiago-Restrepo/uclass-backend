@@ -1,33 +1,34 @@
 const {Router} = require("express");
 const router = Router();
 const studentController = require("../controllers/student.controller");
-
+const { validateToken, isAdmin } = require("../middlewares/auth.handler");
 // Path: /api/students
-router.get("/", async (req, res, next) => {
-    try {
-        const students = await studentController.getAll();
-        res.json(students);
-    } catch (err) {
-        next(err);
+router.get("/", 
+    validateToken,
+    isAdmin,
+    async (req, res, next) => {
+        try {
+            const students = await studentController.getAll();
+            res.json(students);
+        } catch (err) {
+            next(err);
+        }
     }
-});
+);
 
 // Path: /api/students/:id
-router.get("/:id", async (req, res, next) => {
-    try {
-        const student = await studentController.getOne(req.params.id);
-        res.json(student);
-    } catch (error) {
-        console.log(error.isBoom);
-        next(error);
+router.get("/:id", 
+    validateToken,
+    async (req, res, next) => {
+        try {
+            const student = await studentController.getOne(req.params.id);
+            res.json(student);
+        } catch (error) {
+            console.log(error.isBoom);
+            next(error);
+        }
     }
-});
-
-// Path: /api/students
-router.post("/", async (req, res) => {
-    const student = await studentController.create(req.body);
-    res.json(student);
-});
+);
 
 // Path: /api/students/:id
 router.put("/:id", async (req, res) => {    
