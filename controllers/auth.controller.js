@@ -44,6 +44,7 @@ class AuthController{
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(password, salt);
         const userRoleId = this.roles.find(role => role.name === "user")._id;
+        console.log(this.roles)
         const newUser = new User({
             name,
             email,
@@ -104,9 +105,6 @@ class AuthController{
         });
         return token;
     }
-
-
-
 }
 
 // Path: backend\routes\auth.routes.js

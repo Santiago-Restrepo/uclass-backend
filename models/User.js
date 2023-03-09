@@ -9,7 +9,11 @@ const userSchema = new Schema({
     roles: [{
         ref: "Role",
         type: Schema.Types.ObjectId
-    }]
+    }],
+    programId: {
+        ref: "Program",
+        type: Schema.Types.ObjectId
+    }
 },
 {
     timestamps: true,
