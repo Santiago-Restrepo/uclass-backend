@@ -11,7 +11,6 @@ router.post("/signup", async (req, res, next) => {
             message: "user created"
         });
     } catch (error) {
-        console.log("here")
         next(error);
     }
 });

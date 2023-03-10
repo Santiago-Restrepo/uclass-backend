@@ -8,14 +8,14 @@ config();
 class AuthController{
     constructor(){
         this.roles = [];
-
-        this.getRoles().then(roles => {
-            this.roles = roles;
-        });
     }
 
     async getRoles(){
+        if(this.roles.length > 0){
+            return this.roles;
+        }
         const roles = await Role.find();
+        console.log(roles);
         return roles;
     }
     jwtSignUser(user){
@@ -43,8 +43,8 @@ class AuthController{
         //encrypt password
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(password, salt);
-        const userRoleId = this.roles.find(role => role.name === "user")._id;
-        console.log(this.roles)
+        const roles = await Role.find({});
+        const userRoleId = roles.find(role => role.name === "user")._id;
         const newUser = new User({
             name,
             email,
