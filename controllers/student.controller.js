@@ -34,7 +34,8 @@ class StudentController {
     }
     
     async delete(id) {
-
+        const deletedStudent = await User.findByIdAndDelete(id);
+        return deletedStudent;
     }
 }
 

@@ -24,17 +24,24 @@ router.get("/:id",
             const student = await studentController.getOne(req.params.id);
             res.json(student);
         } catch (error) {
-            console.log(error.isBoom);
             next(error);
         }
     }
 );
 
 // Path: /api/students/:id
-router.put("/:id", async (req, res) => {    
-    const student = await studentController.update(req.params.id, req.body);
-    res.json(student);
-});
+router.put("/:id", 
+    validateToken,
+    isAdmin,
+    async (req, res, next) => {    
+        try {
+            const student = await studentController.update(req.params.id, req.body);
+            res.json(student);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
 
 // Path: /api/students/:id
 router.delete("/:id", async (req, res) => {
