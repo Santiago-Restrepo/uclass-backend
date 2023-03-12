@@ -7,14 +7,21 @@ const resourceSchema = new Schema({
     },
     subjectId:  {
         ref: "Subject",
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        required: true
     },
     userId:  {
         ref: "User",
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        required: true
     },
-    content:{
-        type: String
+    resourceUrl:{
+        type: String,
+        required: true
+    },
+    rating: {
+        type: Number,
+        default: 0
     }
 }, {
     versionKey: false,

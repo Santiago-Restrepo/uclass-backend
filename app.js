@@ -12,13 +12,13 @@ const authRoutes = require('./routes/auth.routes')
 const commentRoutes = require('./routes/comment.routes')
 const resourceRoutes = require('./routes/resource.routes')
 const reviewRoutes = require('./routes/review.routes')
-const studentRoutes = require('./routes/student.routes')
+const userRoutes = require('./routes/user.routes')
 const subjectRoutes = require('./routes/subject.routes')
 const teacherRoutes = require('./routes/teacher.routes');
-const userRoutes = require('./routes/user.routes');
+const classesRoutes = require('./routes/class.routes');
+const programRoutes = require('./routes/program.routes');
 const { logErrors, boomErrorHandler, errorHandler } = require('./middlewares/error.handler');
 // const authRoutes = require('./routes/auth.routes')
-// const userRoutes = require('./routes/user.routes')
 
 
 const app = express();
@@ -52,11 +52,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/resources', resourceRoutes);
 app.use('/api/reviews', reviewRoutes);
-app.use('/api/students', studentRoutes);
 app.use('/api/subjects', subjectRoutes);
 app.use('/api/teachers', teacherRoutes);
 app.use('/api/users', userRoutes);
-// app.use('/api/users', userRoutes);
+app.use('/api/classes', classesRoutes);
+app.use('/api/programs', programRoutes);
 
 //middlewares
 app.use(logErrors);

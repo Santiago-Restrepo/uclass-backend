@@ -9,7 +9,6 @@ const validateToken = async (req, res, next) => {
         if (typeof bearerHeader !== 'undefined') {
             const bearer = bearerHeader.split(' ');
             const bearerToken = bearer[1];
-            console.log(bearerToken)
             //Verify token
             const decoded = jwt.verify(bearerToken, process.env.JWT_SECRET);
             req.user = decoded;

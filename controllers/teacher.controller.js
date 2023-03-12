@@ -1,4 +1,5 @@
 const Teacher = require("../models/Teacher");
+const boom = require('@hapi/boom');
 class TeacherController {
     constructor() {
         
@@ -10,8 +11,10 @@ class TeacherController {
     }
     
     async getOne(id) {
-        if(!id) throw new Error("Id not found");
         const teacher = await Teacher.findById(id);
+        if (!teacher) {
+            throw boom.notFound("Teacher not found");
+        }
         return teacher;
     }
     
@@ -34,13 +37,15 @@ class TeacherController {
             name,
             rating
         }, {
-            new: true
+            new: true 
         });
+        if (!teacher) throw boom.notFound("Teacher not found");
         return teacher;
     }
     
     async delete(id) {
         const teacher = await Teacher.findByIdAndDelete(id);
+        if (!teacher) throw boom.notFound("Teacher not found");
         return teacher;
     }
 }

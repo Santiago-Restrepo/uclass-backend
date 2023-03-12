@@ -1,45 +1,57 @@
-const client = require("../clients/postgre");
-
+const Resource = require('../models/Resource');
+const User = require('../models/User');
+const boom = require('@hapi/boom');
 class ResourceController {
     constructor() {
-        this.client = client;
+
     }
     
     async getAll() {
-        const { rows } = await this.client.query("SELECT * FROM resources");
-        return rows;
+        const resources = await Resource.find();
+        return resources;
+
+    }
+
+    async getBySubjectId(subjectId) {
+        const resources = await Resource.find({subjectId: subjectId});
+        return resources;
     }
     
-    async getOne(id) {
-        const { rows } = await this.client.query(
-        "SELECT * FROM resources WHERE id = $1",
-        [id]
-        );
-        return rows[0];
+    async getByUserId(userId) {
+        const resources = await Resource.find({userId: userId});
+        return resources;
     }
     
-    async create(resource) {
-        const { rows } = await this.client.query(
-        "INSERT INTO resources (name, url, subject_id) VALUES ($1, $2, $3) RETURNING *",
-        [resource.name, resource.url, resource.subject_id]
-        );
-        return rows[0];
+    async create(body) {
+        const resource = new Resource(body);
+        await resource.save();
+        return resource;
     }
     
-    async update(id, resource) {
-        const { rows } = await this.client.query(
-        "UPDATE resources SET name = $1, url = $2, subject_id = $3 WHERE id = $4 RETURNING *",
-        [resource.name, resource.url, resource.subject_id, id]
-        );
-        return rows[0];
+    async update(id, body, user) {
+        const resource = await Resource.findById(id);
+        if(!resource) throw boom.notFound('Resource not found');
+        if (resource.userId == user.id) {
+            const updatedResource = await Resource.findByIdAndUpdate(id, body, {new: true});
+            return updatedResource;
+        }else {
+            throw boom.unauthorized('You are not authorized to update this resource');
+        }
     }
     
-    async delete(id) {
-        const { rows } = await this.client.query(
-        "DELETE FROM resources WHERE id = $1 RETURNING *",
-        [id]
-        );
-        return rows[0];
+    async delete(id, user) {
+        const resource = await Resource.findById(id);
+        if (resource.userId == user.id) {
+            const deletedResource = await Resource.findByIdAndDelete(id);
+            return deletedResource;
+        }else {
+            throw boom.unauthorized('You are not authorized to delete this resource');
+        }
+    }
+
+    async deleteByAdmin(id) {
+        const resource = await Resource.findByIdAndDelete(id);
+        return resource;
     }
 }
 
