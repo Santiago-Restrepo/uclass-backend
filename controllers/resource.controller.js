@@ -1,5 +1,4 @@
 const Resource = require('../models/Resource');
-const User = require('../models/User');
 const boom = require('@hapi/boom');
 class ResourceController {
     constructor() {

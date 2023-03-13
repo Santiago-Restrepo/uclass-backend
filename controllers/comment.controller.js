@@ -15,26 +15,24 @@ class CommentController {
     }
 
     async getByResourceId(resourceId) {
-        const comments = await Comment.find({resourceId: resourceId});
+        const comments = await Comment.find({resourceId: resourceId, isDeleted: false});
         return comments;
     }
 
     async getByReviewId(reviewId) {
-        const comments = await Comment.find({reviewId: reviewId});
+        const comments = await Comment.find({reviewId: reviewId, isDeleted: false});
         return comments;
     }
 
     async getByUserId(userId) {
-        const comments = await Comment.find({userId: userId});
+        const comments = await Comment.find({userId: userId, isDeleted: false});
         return comments;
     }
     
     async delete(id) {
-        const comment = await Comment.findByIdAndDelete(id);
-        if (!comment) {
-            throw boom.notFound('Comment not found');
-        }
-        return comment;
+        const deletedComment = await Comment.findByIdAndUpdate(id, {isDeleted: true});
+        if (!deletedComment) throw boom.notFound('Comment not found');
+        return deletedComment;
     }
 }
 

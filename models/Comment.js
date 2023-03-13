@@ -16,6 +16,10 @@ const commentSchema = new Schema({
     reviewId: {
         ref: "Review",
         type: Schema.Types.ObjectId
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
     }
 }, {
     versionKey: false,
