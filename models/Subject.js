@@ -2,23 +2,18 @@ const {Schema, model} = require('mongoose')
 
 const subjectSchema = new Schema({
     name: {
-        type: String
+        type: String,
+        required: true
     },
     description: {
-        type: String
+        type: String,
+        required: true
     },
-    userCreatedId: {
-        ref: "User",
-        type: Schema.Types.ObjectId
-    },
-    userUpdatedId: {
-        ref: "User",
-        type: Schema.Types.ObjectId
-    },
-    classes: [{
-        ref: "Class",
-        type: Schema.Types.ObjectId
-    }]
+    teacherId: {
+        ref: "Teacher",
+        type: Schema.Types.ObjectId,
+        required: true
+    }
 }, {
     versionKey: false,
 });
