@@ -1,4 +1,4 @@
-const Program = require('../models/program.js');
+const Program = require('../models/Program.js');
 const boom = require('@hapi/boom');
 
 class ProgramController{
