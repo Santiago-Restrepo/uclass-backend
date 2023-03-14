@@ -16,6 +16,27 @@ router.get("/",
     }
 );
 
+router.get('/logged',
+    validateToken,
+    async (req, res, next) => {
+        try {
+            const {
+                id,
+                name,
+                email
+            } = req.user;
+            res.json({
+                id,
+                name,
+                email
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+)
+
+
 // Path: /api/users/:id
 router.get("/:id", 
     validateToken,
