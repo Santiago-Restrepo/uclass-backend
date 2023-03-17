@@ -42,9 +42,8 @@ router.get('/google/callback',
             <title>Google Login</title>
         </head>
         <body>
-
             <script>
-                window.opener.postMessage({token: "${token}"}, "*");
+                window.opener.postMessage({token: "${token}", name: "${user.name}"}, "*");
                 window.close();
             </script>
         </body>
