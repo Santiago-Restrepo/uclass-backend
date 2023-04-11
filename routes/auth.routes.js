@@ -5,9 +5,9 @@ const router = Router();
 router.post("/signup", async (req, res, next) => {
     try {
         const {user} = req.body;
-        const token = await authController.signUp(user);
+        const data = await authController.signUp(user);
         res.status(201).json({
-            data: token,
+            ...data,
             message: "user created"
         });
     } catch (error) {
@@ -18,9 +18,9 @@ router.post("/signup", async (req, res, next) => {
 router.post("/signin", async (req, res, next) => {
     try {
         const {user} = req.body;
-        const token = await authController.signIn(user);
+        const data = await authController.signIn(user);
         res.status(200).json({
-            data: token,
+            ...data,
             message: "user logged in"
         });
     } catch (error) {

@@ -57,7 +57,10 @@ class AuthController{
             name: newUser.name,
             email: newUser.email
         });
-        return token;
+        return {
+            token,
+            name: newUser.name
+        };
     }
     async compareAsync(password, hash){
         return new Promise((resolve, reject) => {
@@ -92,7 +95,10 @@ class AuthController{
             name: userFound.name,
             email: userFound.email
         });
-        return token;
+        return {
+            token,
+            name: userFound.name
+        };
     }
     async googleLogin(user){
         if(!user){
