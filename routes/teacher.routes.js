@@ -16,6 +16,20 @@ router.get("/",
     }
 );
 
+//Path: /api/teachers/search
+router.post("/search",
+    validateToken,
+    async (req, res, next) => {
+        try {
+            const {query} = req.body;
+            const teachers = await teacherController.search(query);
+            res.json(teachers);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+            
 // Path: /api/teachers/:id
 router.get("/:id", 
     validateToken,

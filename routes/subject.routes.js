@@ -38,6 +38,20 @@ router.get("/teacher/:teacherId",
         }
     }
 );
+// Path: /api/subjects/search
+router.post("/search",
+    validateToken,
+    async (req, res, next) => {
+        try {
+            const {query} = req.body;
+            const subjects = await subjectController.search(query);
+            res.json(subjects);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
 // Path: /api/subjects
 router.post("/",
     validateToken,

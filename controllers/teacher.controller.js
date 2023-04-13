@@ -17,6 +17,16 @@ class TeacherController {
         }
         return teacher;
     }
+
+    async search(query){
+        const teachers = await Teacher.find({
+            name: {
+                $regex: query,
+                $options: "i"
+            }
+        });
+        return teachers;
+    }
     
     async create(body) {
         const {name, rating} = body;
