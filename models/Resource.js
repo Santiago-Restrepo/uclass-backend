@@ -15,6 +15,10 @@ const resourceSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true
     },
+    description: {
+        type: String,
+        required: true
+    },
     resourceUrl:{
         type: String,
         required: true
