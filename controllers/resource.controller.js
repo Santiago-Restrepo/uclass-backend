@@ -15,6 +15,10 @@ class ResourceController {
         const resources = await Resource.find({subjectId: subjectId});
         return resources;
     }
+    async getBest() {
+        const resources = await Resource.find({}).sort({rating: -1}).limit(3);
+        return resources;
+    }
     
     async getByUserId(userId) {
         const resources = await Resource.find({userId: userId});

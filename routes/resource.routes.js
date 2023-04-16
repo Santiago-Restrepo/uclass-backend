@@ -27,6 +27,19 @@ router.get("/subject/:subjectId",
         }
     }
 );
+
+// Path: api/resources/best
+router.get("/best",
+    validateToken,
+    async (req, res, next) => {
+        try {
+            const resources = await resourceController.getBest();
+            res.json(resources);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
 // Path: api/resources/user/:userId
 router.get("/user/:userId",
     validateToken,

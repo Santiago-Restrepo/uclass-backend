@@ -31,7 +31,7 @@ router.post("/signin", async (req, res, next) => {
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get('/google/callback', 
-    passport.authenticate('google', { failureRedirect: 'http://localhost:3001/login', failureMessage: true }),
+    passport.authenticate('google', { failureRedirect: 'http://localhost:3001/login', failureMessage: "f" }),
     async (req, res) => {
         // Successful authentication, redirect home.
         const user = req.user;

@@ -18,6 +18,11 @@ class TeacherController {
         return teacher;
     }
 
+    async getBest() {
+        const teachers = await Teacher.find({}).sort({rating: -1}).limit(3);
+        return teachers;
+    }
+
     async search(query){
         const teachers = await Teacher.find({
             name: {

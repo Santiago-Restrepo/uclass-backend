@@ -16,6 +16,18 @@ router.get("/",
     }
 );
 
+router.get("/best",
+    validateToken,
+    async (req, res, next) => {
+        try {
+            const teachers = await teacherController.getBest();
+            res.json(teachers);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
 //Path: /api/teachers/search
 router.post("/search",
     validateToken,
