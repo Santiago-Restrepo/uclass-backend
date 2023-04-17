@@ -5,6 +5,10 @@ const teacherSchema = new Schema({
         type: String,
         required: true
     },
+    photo: {
+        type: String,
+        required: true
+    },
     rating: {
         type: Number,
         default: 0

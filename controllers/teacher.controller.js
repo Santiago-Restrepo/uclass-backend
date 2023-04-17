@@ -34,10 +34,14 @@ class TeacherController {
     }
     
     async create(body) {
-        const {name, rating} = body;
+        let {name, rating, photo} = body;
+        if(!photo){
+            photo = `https://ui-avatars.com/api/?name=${name}`;
+        }
         const teacher = new Teacher({
             name,
-            rating
+            rating,
+            photo
         });
         await teacher.save();
         return teacher;
