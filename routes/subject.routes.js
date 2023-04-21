@@ -14,6 +14,17 @@ router.get("/",
         }
     }
 );
+router.get("/populated",
+    validateToken,
+    async (req, res, next) => {
+        try {
+            const pupulatedSubjects = await subjectController.getAllPopulated();
+            res.json(pupulatedSubjects);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
 // Path: /api/subjects/:id
 router.get("/:id",
     validateToken,

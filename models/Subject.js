@@ -9,7 +9,7 @@ const subjectSchema = new Schema({
         type: String,
         required: true
     },
-    teacherId: {
+    teacher: {
         ref: "Teacher",
         type: Schema.Types.ObjectId,
         required: true

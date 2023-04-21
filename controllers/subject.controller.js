@@ -10,7 +10,10 @@ class SubjectController {
         const subjects = await Subject.find();
         return subjects;
     }
-    
+    async getAllPopulated() {
+        const subjects = await Subject.find().populate("teacher");
+        return subjects;
+    }
     async getOne(id) {
         const subject = await Subject.findById(id);
         if (!subject) throw boom.notFound("Subject not found");
@@ -39,7 +42,7 @@ class SubjectController {
     }
 
     async getByTeacherId(teacherId) {
-        const subjects = await Subject.find({teacherId: teacherId});
+        const subjects = await Subject.find({teacher: teacherId});
         return subjects;
     }
     

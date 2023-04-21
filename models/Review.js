@@ -15,14 +15,24 @@ const reviewSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true
     },
-    userId:  {
+    user:  {
         ref: "User",
         type: Schema.Types.ObjectId,
         required: true
     },
     rating: {
-        type: Number,
-        required: true
+        clarity: {
+            type: Number,
+            required: true
+        },
+        demanding: {
+            type: Number,
+            required: true
+        },
+        fairness: {
+            type: Number,
+            required: true
+        }
     },
     parentReviewId: {
         ref: "Review",
