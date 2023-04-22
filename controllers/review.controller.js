@@ -22,7 +22,7 @@ class ReviewController {
     }
 
     async getByUserId(userId) {
-        const reviews = await Review.find({userId: userId, isEdited: false, isDeleted: false});
+        const reviews = await Review.find({user: userId, isEdited: false, isDeleted: false});
         return reviews;
     }
 
@@ -32,7 +32,8 @@ class ReviewController {
     }
 
     async getByTeacherId(teacherId) {
-        const reviews = await Review.find({teacherId: teacherId, isApproved: true, isEdited: false, isDeleted: false});
+        
+        const reviews = await Review.find({teacherId: teacherId, isApproved: true, isEdited: false, isDeleted: false}).populate('user');
         return reviews;
     }
 
@@ -49,11 +50,11 @@ class ReviewController {
         if(!content && !rating) throw boom.badRequest('You must provide content or rating');
         const review = await Review.findById(id);
         if (!review) throw boom.notFound('Review not found');
-        if (review.userId == user.id) {
+        if (review.user == user.id) {
             const newReview = new Review({
                 content: content ? content : review.content,
                 rating: rating ? rating : review.rating,
-                userId: review.userId,
+                user: review.user,
                 subjectId: review.subjectId,
                 teacherId: review.teacherId,
                 originalReviewId: review.originalReviewId ? review.originalReviewId : review._id,
@@ -76,7 +77,7 @@ class ReviewController {
         if(review.isEdited) throw boom.badRequest('You cannot edit an edited review');
         const newReview = new Review({
             ...body,
-            userId: review.userId,
+            user: review.user,
             subjectId: review.subjectId,
             teacherId: review.teacherId,
             parentReviewId: review.parentReviewId ? review.parentReviewId : review._id
