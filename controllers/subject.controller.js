@@ -15,7 +15,7 @@ class SubjectController {
         return subjects;
     }
     async getOne(id) {
-        const subject = await Subject.findById(id);
+        const subject = await Subject.findById(id).populate("teacher");
         if (!subject) throw boom.notFound("Subject not found");
         return subject;
     }
