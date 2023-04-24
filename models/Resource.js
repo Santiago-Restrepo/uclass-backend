@@ -5,12 +5,12 @@ const resourceSchema = new Schema({
         type: String,
         required: true
     },
-    subjectId:  {
+    subject:  {
         ref: "Subject",
         type: Schema.Types.ObjectId,
         required: true
     },
-    userId:  {
+    user:  {
         ref: "User",
         type: Schema.Types.ObjectId,
         required: true
@@ -24,6 +24,10 @@ const resourceSchema = new Schema({
         required: true
     },
     rating: {
+        type: Number,
+        default: 0
+    },
+    ratingCount: {
         type: Number,
         default: 0
     }

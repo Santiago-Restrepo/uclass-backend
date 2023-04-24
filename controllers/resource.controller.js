@@ -1,4 +1,5 @@
 const Resource = require('../models/Resource');
+const Rating = require('../models/Rating');
 const boom = require('@hapi/boom');
 class ResourceController {
     constructor() {
@@ -8,11 +9,10 @@ class ResourceController {
     async getAll() {
         const resources = await Resource.find();
         return resources;
-
     }
 
     async getBySubjectId(subjectId) {
-        const resources = await Resource.find({subjectId: subjectId});
+        const resources = await Resource.find({subject: subjectId}).populate('user');
         return resources;
     }
     async getBest() {
@@ -34,17 +34,36 @@ class ResourceController {
     async update(id, body, user) {
         const resource = await Resource.findById(id);
         if(!resource) throw boom.notFound('Resource not found');
-        if (resource.userId == user.id) {
+        if (resource.user == user.id) {
             const updatedResource = await Resource.findByIdAndUpdate(id, body, {new: true});
             return updatedResource;
         }else {
             throw boom.unauthorized('You are not authorized to update this resource');
         }
     }
+
+    async rate(id, rating, userId) {
+        const resource = await Resource.findById(id);
+        if(!resource) throw boom.notFound('Resource not found');
+        const newRating = new Rating({
+            rating: rating,
+            user: userId,
+            resource: id
+        });
+        await newRating.save();
+        const ratings = await Rating.find({resource: id});
+        let sum = 0;
+        for (let i = 0; i < ratings.length; i++) {
+            sum += ratings[i].rating;
+        }
+        const avg = sum / ratings.length;
+        await Resource.findByIdAndUpdate(id, {rating: avg}, {new: true});
+        return avg;
+    }
     
     async delete(id, user) {
         const resource = await Resource.findById(id);
-        if (resource.userId == user.id) {
+        if (resource.user == user.id) {
             const deletedResource = await Resource.findByIdAndDelete(id);
             return deletedResource;
         }else {

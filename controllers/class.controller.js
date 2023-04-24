@@ -24,7 +24,7 @@ class classController {
 
     async findBySubjectId(subjectId) {
         const classFound = await classModel.find({
-            subjectId: subjectId
+            subject: subjectId
         })
 
         if (!classFound) {
