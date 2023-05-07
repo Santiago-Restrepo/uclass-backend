@@ -22,7 +22,7 @@ class ReviewController {
     }
 
     async getByUserId(userId) {
-        const reviews = await Review.find({user: userId, isEdited: false, isDeleted: false});
+        const reviews = await Review.find({user: userId, isEdited: false, isDeleted: false}).populate('user');
         return reviews;
     }
 
