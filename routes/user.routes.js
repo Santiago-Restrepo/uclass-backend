@@ -20,21 +20,28 @@ router.get('/logged',
     validateToken,
     async (req, res, next) => {
         try {
-            const {
-                id,
-                name,
-                email
-            } = req.user;
+            if(!req.user) throw boom.unauthorized('Unauthorized');
             res.json({
-                id,
-                name,
-                email
+                ...req.user,
             })
         } catch (error) {
             next(error);
         }
     }
 )
+
+// Path: /api/users/roles
+router.get("/roles",
+    validateToken,
+    isAdmin,
+    async (req, res, next) => {
+        try {
+            const roles = await userController.getRoles();
+            res.json(roles);
+        } catch (error) {
+            next(error);
+        }
+});
 
 
 // Path: /api/users/:id
@@ -77,10 +84,5 @@ router.delete("/:id",
         }
     }
 );
-
-router.get("/roles", async (req, res) => {
-    const roles = await userController.getRoles();
-    res.json(roles);
-});
 
 module.exports = router;

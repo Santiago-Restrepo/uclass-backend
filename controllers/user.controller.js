@@ -1,5 +1,6 @@
 const boom = require('@hapi/boom');
 const User = require("../models/User");
+const Role = require("../models/Role");
 class userController {
     constructor() {
     }
@@ -47,7 +48,7 @@ class userController {
     }
 
     async getRoles() {
-        const roles = await this.roleModel.find();
+        const roles = await Role.find();
         return roles;
     }
 }

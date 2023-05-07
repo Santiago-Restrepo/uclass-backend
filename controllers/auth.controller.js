@@ -82,7 +82,8 @@ class AuthController{
             throw boom.badRequest("All fields are required");
         }
 
-        const userFound = await User.findOne({email});
+        const userFound = await User.findOne({email}).populate("roles");
+        
         if(!userFound){
             throw boom.badRequest("User not found");
         }
@@ -93,7 +94,8 @@ class AuthController{
         const token = this.jwtSignUser({
             id: userFound._id,
             name: userFound.name,
-            email: userFound.email
+            email: userFound.email,
+            roles: userFound.roles.map(role => role.name)
         });
         return {
             token,
@@ -105,9 +107,12 @@ class AuthController{
             throw boom.unauthorized("User not found");
         }
         const {email} = user;
-        const userFound = await User.findOne({email});
-        const token = jwt.sign({id: userFound._id}, process.env.JWT_SECRET, {
-            expiresIn: 60 * 60 * 24
+        const userFound = await User.findOne({email}).populate("roles");
+        const token = this.jwtSignUser({
+            id: userFound._id,
+            name: userFound.name,
+            email: userFound.email,
+            roles: userFound.roles.map(role => role.name)
         });
         return token;
     }
