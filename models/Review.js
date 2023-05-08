@@ -5,7 +5,7 @@ const reviewSchema = new Schema({
         type: String,
         required: true
     },
-    subjectId:  {
+    subject:  {
         ref: "Subject",
         type: Schema.Types.ObjectId,
         required: true

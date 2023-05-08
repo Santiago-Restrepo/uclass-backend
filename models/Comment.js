@@ -1,10 +1,10 @@
 const {Schema, model} = require('mongoose')
 
 const commentSchema = new Schema({
-    comment: {
+    content: {
         type: String
     },
-    userId: {
+    user: {
         ref: "User",
         type: Schema.Types.ObjectId,
         required: true
@@ -23,5 +23,6 @@ const commentSchema = new Schema({
     }
 }, {
     versionKey: false,
+    timestamps: true
 });
 module.exports = model('Comment', commentSchema);

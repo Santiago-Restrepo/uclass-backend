@@ -20,12 +20,12 @@ class CommentController {
     }
 
     async getByReviewId(reviewId) {
-        const comments = await Comment.find({reviewId: reviewId, isDeleted: false});
+        const comments = await Comment.find({reviewId: reviewId, isDeleted: false}).populate('user');
         return comments;
     }
 
     async getByUserId(userId) {
-        const comments = await Comment.find({userId: userId, isDeleted: false});
+        const comments = await Comment.find({user: userId, isDeleted: false});
         return comments;
     }
     

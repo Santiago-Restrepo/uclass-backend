@@ -16,7 +16,8 @@ class ReviewController {
     }
     
     async getOne(id) {
-        const review  = await Review.findById(id);
+        //Populate user and subject
+        const review  = await Review.findById(id).populate('user').populate('subject');
         if (!review) throw boom.notFound('Review not found');
         return review;
     }
@@ -27,7 +28,7 @@ class ReviewController {
     }
 
     async getBySubjectId(subjectId) {
-        const reviews = await Review.find({subjectId: subjectId, isApproved: true, isEdited: false, isDeleted: false});
+        const reviews = await Review.find({subject: subjectId, isApproved: true, isEdited: false, isDeleted: false});
         return reviews;
     }
 
@@ -55,7 +56,7 @@ class ReviewController {
                 content: content ? content : review.content,
                 rating: rating ? rating : review.rating,
                 user: review.user,
-                subjectId: review.subjectId,
+                subject: review.subject,
                 teacherId: review.teacherId,
                 originalReviewId: review.originalReviewId ? review.originalReviewId : review._id,
                 parentReviewId: id
@@ -78,7 +79,7 @@ class ReviewController {
         const newReview = new Review({
             ...body,
             user: review.user,
-            subjectId: review.subjectId,
+            subject: review.subject,
             teacherId: review.teacherId,
             parentReviewId: review.parentReviewId ? review.parentReviewId : review._id
         });
