@@ -16,5 +16,6 @@ const subjectSchema = new Schema({
     }
 }, {
     versionKey: false,
+    timestamps: true
 });
 module.exports = model('Subject', subjectSchema);

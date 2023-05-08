@@ -23,5 +23,6 @@ const teacherSchema = new Schema({
     }
 }, {
     versionKey: false,
+    timestamps: true
 });
 module.exports = model('Teacher', teacherSchema);

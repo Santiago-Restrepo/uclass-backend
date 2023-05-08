@@ -33,5 +33,6 @@ const resourceSchema = new Schema({
     }
 }, {
     versionKey: false,
+    timestamps: true
 });
 module.exports = model('Resource', resourceSchema);
