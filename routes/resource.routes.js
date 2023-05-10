@@ -40,6 +40,18 @@ router.get("/best",
         }
     }
 );
+
+router.get("/:resourceId",
+    validateToken,
+    async (req, res, next) => {
+        try {
+            const resource = await resourceController.getOne(req.params.resourceId);
+            res.json(resource);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
 // Path: api/resources/user/:userId
 router.get("/user/:userId",
     validateToken,
