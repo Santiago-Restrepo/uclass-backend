@@ -11,7 +11,7 @@ class ResourceController {
         return resources;
     }
     async getOne(id) {
-        const resource = await Resource.findById(id);
+        const resource = await Resource.findById(id).populate('user').populate('subject');
         if(!resource) throw boom.notFound('Resource not found');
         return resource;
     }
