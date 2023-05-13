@@ -31,10 +31,10 @@ class CommentController {
         const comments = await Comment.find({resourceId});
         let sum = 0;
         for (let i = 0; i < comments.length; i++) {
-            sum += comments[i].rating;
+            sum += comments[i].rating ? comments[i].rating : 0;
         }
         const avg = sum / comments.length;
-        await Resource.findByIdAndUpdate(id, {rating: avg, ratingCount: comments.length}, {new: true});
+        await Resource.findByIdAndUpdate(resourceId, {rating: avg, ratingCount: comments.length}, {new: true});
         return createdComment;
     }
     
