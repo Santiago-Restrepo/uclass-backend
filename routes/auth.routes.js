@@ -19,6 +19,15 @@ router.post("/signin", async (req, res, next) => {
     try {
         const {user} = req.body;
         const data = await authController.signIn(user);
+        
+        //Set cookie
+        res.cookie('token', data.token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none'
+        });
+        
+
         res.status(200).json({
             ...data,
             message: "user logged in"

@@ -2,7 +2,8 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 const {config} = require("dotenv");
-const cookieSession = require('cookie-session');
+
+const cookieParser = require('cookie-parser');
 const pkg = require('./package.json');
 require('./middlewares/google.handler');
 config();
@@ -26,12 +27,13 @@ const app = express();
 app.set("port", process.env.PORT || 3000);
 
 //middlewares
-app.use(cookieSession({
-    name: 'session',
-    keys: ['uclass'],
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
-}));
-const corsOptions = {};
+
+const corsOptions = {
+    //Allowing all origins
+    origin: ['http://localhost:3001', 'https://uclass-frontend.vercel.app'],
+    credentials: true,
+};
+app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(bodyParser.urlencoded({

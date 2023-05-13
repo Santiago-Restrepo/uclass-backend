@@ -4,17 +4,12 @@ const User = require('../models/User');
 const Role = require('../models/Role');
 const validateToken = async (req, res, next) => {
     try {
-        //Get bearer token
-        const bearerHeader = req.headers['authorization'];
-        if (typeof bearerHeader !== 'undefined') {
-            const bearer = bearerHeader.split(' ');
-            const bearerToken = bearer[1];
-            //Verify token
-            const decoded = jwt.verify(bearerToken, process.env.JWT_SECRET);
-            req.user = decoded;
-        } else {
-            throw boom.unauthorized('Unauthorized');
-        }
+        //Get token from cookie
+        const cookies = req.cookies;
+        const token = cookies.token;
+        if (!token) throw boom.unauthorized('Unauthorized');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
         next();
     } catch (error) {
         next(error);
