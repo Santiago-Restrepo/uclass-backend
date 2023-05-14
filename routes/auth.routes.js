@@ -27,7 +27,7 @@ router.post("/signin", async (req, res, next) => {
             httpOnly: true,
             secure: true,
             sameSite: 'none',
-            domain: cookieDomain
+            // domain: cookieDomain
         });
         
 
