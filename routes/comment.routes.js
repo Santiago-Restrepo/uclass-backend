@@ -22,6 +22,10 @@ router.post("/",
     validateToken,
     async (req, res, next) => {
         try {
+            const {user} = req;
+            if(user && user.id){
+                req.body.user = user.id;
+            }
             const comment = await commentController.create(req.body);
             res.json(comment);
         } catch (error) {

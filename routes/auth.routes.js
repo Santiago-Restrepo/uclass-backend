@@ -37,6 +37,17 @@ router.post("/signin", async (req, res, next) => {
     }
 });
 
+router.get("/logout", async (req, res, next) => {
+    try {
+        res.clearCookie('token');
+        res.status(200).json({
+            message: "user logged out"
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get('/google/callback', 
@@ -45,6 +56,12 @@ router.get('/google/callback',
         // Successful authentication, redirect home.
         const user = req.user;
         const token = await authController.googleLogin(user);
+        //Set cookie
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none'
+        });
         res.status(200).send(`<!DOCTYPE html>
         <html>
         <head>
