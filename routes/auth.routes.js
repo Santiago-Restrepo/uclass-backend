@@ -22,7 +22,7 @@ router.post("/signin", async (req, res, next) => {
         
         //Set cookie
 
-        const cookieDomain = process.env.NODE_ENV === 'production' ? '.uclass-frontend.vercel.app' : '.localhost';
+        const cookieDomain = process.env.NODE_ENV === 'production' ? '.vercel.app' : '.localhost';
         res.cookie('token', data.token, {
             httpOnly: true,
             secure: true,
