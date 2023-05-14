@@ -21,10 +21,13 @@ router.post("/signin", async (req, res, next) => {
         const data = await authController.signIn(user);
         
         //Set cookie
+
+        const cookieDomain = process.env.NODE_ENV === 'production' ? 'uclass-frontend.vercel.app' : 'localhost';
         res.cookie('token', data.token, {
             httpOnly: true,
             secure: true,
-            sameSite: 'none'
+            sameSite: 'none',
+            domain: cookieDomain
         });
         
 
