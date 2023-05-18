@@ -6,6 +6,7 @@ const validateToken = async (req, res, next) => {
     try {
         //Get token from cookie
         const cookies = req.cookies;
+        console.log(cookies)
         const token = cookies.token;
         if (!token) throw boom.unauthorized('Unauthorized');
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
