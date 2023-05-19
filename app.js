@@ -30,7 +30,7 @@ app.set("port", process.env.PORT || 3000);
 
 const corsOptions = {
     //Allowing all origins
-    origin: ['http://localhost:3001', 'https://uclass-frontend.vercel.app'],
+    origin: ['http://localhost:3001', 'https://uclass-frontend.vercel.app', 'https://frontend.uclass.space'],
     credentials: true,
 };
 app.use(cookieParser());
