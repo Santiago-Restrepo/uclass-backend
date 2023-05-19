@@ -43,7 +43,13 @@ router.post("/signin", async (req, res, next) => {
 
 router.get("/logout", async (req, res, next) => {
     try {
-        res.clearCookie('token');
+        const cookieDomain = process.env.NODE_ENV === 'production' ? '.uclass.space' : 'localhost';
+        res.cookie('token', '', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            domain: cookieDomain
+        });
         res.status(200).json({
             message: "user logged out"
         });
