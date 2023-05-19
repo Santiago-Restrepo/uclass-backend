@@ -57,6 +57,25 @@ router.get("/:id",
     }
 );
 
+// Path: /api/users/changePassword
+
+router.put("/changePassword", 
+    validateToken,
+    async (req, res, next) => {
+        try {
+            const body = req.body;
+            const user = req.user;
+            if(user) {
+                body.userId = user.id;
+            }
+            const userUpdated = await userController.changePassword(body);
+            res.json(userUpdated);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
 // Path: /api/users/:id
 router.put("/:id", 
     validateToken,

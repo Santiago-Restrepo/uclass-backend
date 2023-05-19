@@ -1,6 +1,9 @@
 const boom = require('@hapi/boom');
 const User = require("../models/User");
 const Role = require("../models/Role");
+const authController = require("../controllers/auth.controller");
+const bcrypt = require("bcryptjs");
+const {config} = require("dotenv");
 class userController {
     constructor() {
     }
@@ -25,7 +28,6 @@ class userController {
 
         return user;
     }
-
     
     async update(id, user) {
         const updatedUser = await User.findByIdAndUpdate(id, user, {
@@ -34,7 +36,31 @@ class userController {
         updatedUser.password = undefined;
         return updatedUser;
     }
-    
+
+    async changePassword(body) {
+        const {
+            userId, currentPassword, newPassword
+        } = body;
+        if(!currentPassword || !userId || !newPassword) {
+            throw boom.badRequest("Missing parameters");
+        }
+        const userFound = await User.findById(userId);
+        if(!userFound) {
+            throw boom.notFound("User not found");
+        }
+        const isMatch = await authController.compareAsync(currentPassword, userFound.password);
+        if(!isMatch) {
+            throw boom.badRequest("Old password is incorrect");
+        }
+        //encrypt password
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(newPassword, salt);
+        const updatedUser = await User.findByIdAndUpdate(userId, {password: hash}, {
+            new: true
+        });
+        updatedUser.password = undefined;
+        return updatedUser;
+    }
     async delete(id) {
         if(!id) {
             throw boom.badRequest("Id is required");
