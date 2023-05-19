@@ -70,7 +70,12 @@ router.post("/",
     validateToken,
     async (req, res, next) => {
         try {
-            const resource = await resourceController.create(req.body);
+            const user = req.user;
+            const body = req.body;
+            if(user && user.id){
+                body.user = user.id;
+            }
+            const resource = await resourceController.create(body);
             res.json(resource);
         } catch (error) {
             next(error);
