@@ -45,12 +45,12 @@ class CommentController {
 
     async getByResourceId(resourceId) {
         const comments = await Comment.find({resourceId: resourceId, isDeleted: false}).populate('user');
-        return comments;
+        return comments.filter(comment => comment.user)
     }
 
     async getByReviewId(reviewId) {
         const comments = await Comment.find({reviewId: reviewId, isDeleted: false}).populate('user');
-        return comments;
+        return comments.filter(comment => comment.user)
     }
 
     async getByUserId(userId) {

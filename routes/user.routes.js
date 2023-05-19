@@ -93,11 +93,13 @@ router.put("/:id",
 // Path: /api/users/:id
 router.delete("/:id", 
     validateToken,
-    isAdmin,
     async (req, res, next) => {
         try {
-            const user = await userController.delete(req.params.id);
-            res.json(user);
+            const user = req.user;
+            const userId = req.params.id;
+            if(user.id !== userId) throw boom.unauthorized('Unauthorized');
+            const userDeleted = await userController.delete(req.params.id);
+            res.json(userDeleted);
         } catch (error) {
             next(error);
         }
