@@ -84,7 +84,12 @@ router.post("/",
     validateToken,
     async (req, res, next) => {
         try {
-            const review = await reviewController.create(req.body);
+            const user = req.user;
+            const body = req.body;
+            if(user && user.id){
+                body.user = user.id;
+            }
+            const review = await reviewController.create(body);
             res.json(review);
         } catch (error) {
             next(error);
