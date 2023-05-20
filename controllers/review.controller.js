@@ -11,10 +11,14 @@ class ReviewController {
     }
     
     async getAll() {
-        const reviews = await Review.find();
+        const reviews = await Review.find().populate('user');
         return reviews;
     }
-    
+
+    async getPending() {
+        const reviews = await Review.find({isApproved: false, isEdited: false, isDeleted: false, isRejected: false}).populate('user');
+        return reviews;
+    }
     
     async getOne(id) {
         //Populate user and subject
@@ -104,6 +108,21 @@ class ReviewController {
             isApproved: true
         }, {new: true});
         return approvedReview;
+    }
+    async reject(id, reason) {
+        if(!reason) throw boom.badRequest('You must provide a reason for rejection');
+        const review = await Review.findById(id);
+        if (!review) throw boom.notFound('Review not found');
+        if(review.parentReviewId){
+            await Review.findByIdAndUpdate(review.parentReviewId, {
+                isEdited: true
+            }, {new: true});
+        }
+        const rejectedReview = await Review.findByIdAndUpdate(id, {
+            isRejected: true,
+            rejectedReason: reason
+        }, {new: true});
+        return rejectedReview;
     }
     
     async delete(id) {

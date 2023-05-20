@@ -17,6 +17,20 @@ router.get("/",
     }
 );
 
+// Path: /api/pending
+router.get("/pending", 
+    validateToken,
+    isAdmin,
+    async (req, res, next) => {
+        try {
+            const reviews = await reviewController.getPending();
+            res.json(reviews);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
 
 // Path: /api/reviews/:id
 router.get("/:id",
@@ -130,6 +144,19 @@ router.put("/approve/:id",
         try {
             const updatedReview = await reviewController.approve(req.params.id);
             res.json(updatedReview);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+router.put("/reject/:id",
+    validateToken, 
+    isAdmin,
+    async (req, res, next) => {
+        try {
+            const rejectedReason = req.body.reason;
+            const rejectedReview = await reviewController.reject(req.params.id, rejectedReason);
+            res.json(rejectedReview);
         } catch (error) {
             next(error);
         }

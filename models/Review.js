@@ -50,6 +50,15 @@ const reviewSchema = new Schema({
         type: Boolean,
         default: false
     },
+    isRejected: {
+        type: Boolean,
+        default: false
+    },
+    rejectedReason: {
+        type: String,
+        required: false,
+        nullable: true
+    },
     isDeleted: {
         type: Boolean,
         default: false
