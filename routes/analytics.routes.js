@@ -87,4 +87,16 @@ router.get("/subjects/resources/comments/count",
         }
     }
 );
+
+router.get("/subjects/resources/rating/count",
+    validateToken,
+    async (req, res, next) => {
+        try {
+            const resources = await analyticsController.getSubjectResourceRatingCount();
+            res.json(resources);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
 module.exports = router;

@@ -300,6 +300,40 @@ class AnalyticsController {
         ]);
         return comments;
     }
+
+    async getSubjectResourceRatingCount() {
+        const ratings = await Resource.aggregate([
+            {
+                $group: {
+                    _id: "$subject",
+                    rating: { $avg: "$rating" },
+                }
+            },
+            {
+                $lookup: {
+                    from: "subjects",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "subject"
+                }
+            },
+            {
+                $unwind: "$subject"
+            },
+            {
+                $project: {
+                    _id: 0,
+                    rating: 1,
+                    subject: {
+                        _id: 1,
+                        name: 1
+                    }
+                }
+            }
+        ]);
+        return ratings;
+    }
+
 }
 
 module.exports = new AnalyticsController();
