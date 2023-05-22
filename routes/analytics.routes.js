@@ -50,4 +50,41 @@ router.get("/teachers/reviews/comments/count",
     }
 );
 
+//Resources and subjects
+
+router.get("/resources/count",
+    validateToken,
+    async (req, res, next) => {
+        try {
+            const resources = await analyticsController.getResourcesByDate();
+            res.json(resources);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+router.get("/subjects/resources/count",
+    validateToken,
+    async (req, res, next) => {
+        try {
+            const resources = await analyticsController.getSubjectResourcesCount();
+            res.json(resources);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+router.get("/subjects/resources/comments/count",
+    validateToken,
+    async (req, res, next) => {
+        try {
+            const resources = await analyticsController.getSubjectResourceCommentsCount();
+            res.json(resources);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
 module.exports = router;

@@ -195,7 +195,111 @@ class AnalyticsController {
 
     //Subjects and resources analytics
 
-    async 
+    async getResourcesByDate() {
+        const resources = await Resource.aggregate([
+            {
+                $group: {
+                    _id: {
+                        $dateToString: {
+                            format: "%Y-%m-%d",
+                            date: "$createdAt"
+                        }
+                    },
+                    count: { $sum: 1 }    
+                }
+            },
+            {
+                $sort: {
+                    _id: 1
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    date: "$_id",
+                    count: 1
+                }
+            }
+        ]);
+        return resources;
+    }
+
+    async  getSubjectResourcesCount() {
+        const resources = await Resource.aggregate([
+            {
+                $group: {
+                    _id: "$subject",
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $lookup: {
+                    from: "subjects",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "subject"
+                }
+            },
+            {
+                $unwind: "$subject"
+            },
+            {
+                $project: {
+                    _id: 0,
+                    count: 1,
+                    subject: {
+                        _id: 1,
+                        name: 1
+                    }
+                }
+            }
+        ]);
+        return resources;
+    }
+
+    async getSubjectResourceCommentsCount() {
+        const comments = await Comment.aggregate([
+            {
+                $lookup: {
+                    from: "resources",
+                    localField: "resourceId",
+                    foreignField: "_id",
+                    as: "resource"
+                }
+            },
+            {
+                $unwind: "$resource"
+            },
+            {
+                $group: {
+                    _id: "$resource.subject",
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $lookup: {
+                    from: "subjects",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "subject"
+                }
+            },
+            {
+                $unwind: "$subject"
+            },
+            {
+                $project: {
+                    _id: 0,
+                    count: 1,
+                    subject: {
+                        _id: 1,
+                        name: 1
+                    }
+                }
+            }
+        ]);
+        return comments;
+    }
 }
 
 module.exports = new AnalyticsController();
