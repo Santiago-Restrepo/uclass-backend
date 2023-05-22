@@ -15,5 +15,27 @@ router.get("/teachers/reviews/count",
         }
     }
 );
+router.get("/teachers/reviews/rating/count", 
+    validateToken,
+    async (req, res, next) => {
+        try {
+            const reviews = await analyticsController.getTeachersReviewsCountByRatings();
+            res.json(reviews);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+router.get("/teachers/reviews/comments/count", 
+    validateToken,
+    async (req, res, next) => {
+        try {
+            const comments = await analyticsController.getTeachersReviewCommentsCount();
+            res.json(comments);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
 
 module.exports = router;
