@@ -18,6 +18,7 @@ const subjectRoutes = require('./routes/subject.routes')
 const teacherRoutes = require('./routes/teacher.routes');
 const classesRoutes = require('./routes/class.routes');
 const programRoutes = require('./routes/program.routes');
+const analyticsRoutes = require('./routes/analytics.routes');
 const { logErrors, boomErrorHandler, errorHandler } = require('./middlewares/error.handler');
 // const authRoutes = require('./routes/auth.routes')
 
@@ -59,6 +60,7 @@ app.use('/api/teachers', teacherRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/classes', classesRoutes);
 app.use('/api/programs', programRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 //middlewares
 app.use(logErrors);
