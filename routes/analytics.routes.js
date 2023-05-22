@@ -15,6 +15,18 @@ router.get("/teachers/reviews/count",
         }
     }
 );
+router.get("/reviews/count",
+    validateToken,
+    async (req, res, next) => {
+        try {
+            const reviews = await analyticsController.getReviewsByDate();
+            res.json(reviews);
+        } catch (error) {   
+            next(error);
+        }
+    }
+);
+
 router.get("/teachers/reviews/rating/count", 
     validateToken,
     async (req, res, next) => {

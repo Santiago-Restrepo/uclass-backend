@@ -1,7 +1,11 @@
 const Review = require("../models/Review.js");
 const Comment = require("../models/Comment.js");
+const Subject = require("../models/Subject.js");
+const Resource = require("../models/Resource.js");
 const boom = require("@hapi/boom");
 class AnalyticsController {
+
+    //Teachers and reviews analytics
     async getTeachersReviewsCount() {
         const reviews = await Review.aggregate([
             {
@@ -153,6 +157,45 @@ class AnalyticsController {
         ]);
         return comments;
     }
+    async getReviewsByDate() {
+        const reviews = await Review.aggregate([
+            {
+                $match: {
+                    isApproved: true,
+                    isDeleted: false,
+                    isRejected: false
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        $dateToString: {
+                            format: "%Y-%m-%d",
+                            date: "$createdAt"
+                        }
+                    },
+                    count: { $sum: 1 }    
+                }
+            },
+            {
+                $sort: {
+                    _id: 1
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    date: "$_id",
+                    count: 1
+                }
+            }
+        ]);
+        return reviews;
+    }
+
+    //Subjects and resources analytics
+
+    async 
 }
 
 module.exports = new AnalyticsController();
