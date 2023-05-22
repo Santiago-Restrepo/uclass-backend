@@ -4,7 +4,7 @@ const analyticsController = require("../controllers/analytics.controller");
 const { validateToken, isAdmin } = require("../middlewares/auth.handler");
 
 // Path: /api/reviews
-router.get("/teachersReviewsCount", 
+router.get("/teachers/reviews/count", 
     validateToken,
     async (req, res, next) => {
         try {
