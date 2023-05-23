@@ -59,6 +59,7 @@ router.get("/:id",
 // Path: /api/teachers
 router.post("/", 
     validateToken,
+    isAdmin,
     async (req, res, next) => {
         try {
             const teacher = await teacherController.create(req.body);

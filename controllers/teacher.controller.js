@@ -34,14 +34,13 @@ class TeacherController {
     }
     
     async create(body) {
-        let {name, rating, description, photo, email} = body;
+        let {name, description, photo, email} = body;
         if(!photo){
             photo = `https://ui-avatars.com/api/?name=${name}`;
         }
         const teacher = new Teacher({
             name,
             description,
-            rating,
             photo,
             email
         });
@@ -72,7 +71,7 @@ class TeacherController {
     
     async delete(id) {
         const teacher = await Teacher.findByIdAndDelete(id);
-        if (!teacher) throw boom.notFound("Teacher not found");
+        if (!teacher) throw boom.notFound(`Teacher ${id} not found`);
         return teacher;
     }
 }
