@@ -67,10 +67,12 @@ router.get('/google/callback',
         const user = req.user;
         const token = await authController.googleLogin(user);
         //Set cookie
+        const cookieDomain = process.env.NODE_ENV === 'production' ? '.uclass.space' : 'localhost';
         res.cookie('token', token, {
             httpOnly: true,
             secure: true,
-            sameSite: 'none'
+            sameSite: 'none',
+            domain: cookieDomain
         });
         res.status(200).send(`<!DOCTYPE html>
         <html>
