@@ -77,24 +77,24 @@ class ReviewController {
     
     async getAll() {
         const reviews = await Review.find().populate('user');
-        return reviews;
+        return reviews.filter(review => review.user);
     }
 
     async getPending() {
         const reviews = await Review.find({isApproved: false, isEdited: false, isDeleted: false, isRejected: false}).populate('user');
-        return reviews;
+        return reviews.filter(review => review.user);
     }
     
     async getOne(id) {
         //Populate user and subject
         const review  = await Review.findById(id).populate('user').populate('subject');
         if (!review) throw boom.notFound('Review not found');
-        return review;
+        return review.filter(review => review.user && review.subject);
     }
 
     async getByUserId(userId) {
         const reviews = await Review.find({user: userId, isEdited: false, isDeleted: false}).populate('user');
-        return reviews;
+        return reviews.filter(review => review.user);
     }
 
     async getBySubjectId(subjectId) {
@@ -105,7 +105,7 @@ class ReviewController {
     async getByTeacherId(teacherId) {
         
         const reviews = await Review.find({teacherId: teacherId, isApproved: true, isEdited: false, isDeleted: false}).populate('user');
-        return reviews;
+        return reviews.filter(review => review.user);
     }
 
     async getEdits(id) {

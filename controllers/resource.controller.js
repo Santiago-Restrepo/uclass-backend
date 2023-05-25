@@ -13,11 +13,11 @@ class ResourceController {
     async getOne(id) {
         const resource = await Resource.findById(id).populate('user').populate('subject');
         if(!resource) throw boom.notFound('Resource not found');
-        return resource;
+        return resource.filter(resource => resource.user && resource.subject);
     }
     async getBySubjectId(subjectId) {
         const resources = await Resource.find({subject: subjectId}).populate('user');
-        return resources;
+        return resources.filter(resource => resource.user);
     }
     async getBest() {
         const resources = await Resource.find({}).sort({rating: -1}).limit(3);
@@ -26,7 +26,7 @@ class ResourceController {
     
     async getByUserId(userId) {
         const resources = await Resource.find({userId: userId}).populate('subject');
-        return resources;
+        return resources.filter(resource => resource.subject);
     }
     
     async create(body) {

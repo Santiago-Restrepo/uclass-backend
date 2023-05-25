@@ -7,17 +7,17 @@ class SubjectController {
     }
     
     async getAll() {
-        const subjects = await Subject.find();
-        return subjects;
+        const subjects = await Subject.find().populate("teacher");
+        return subjects.filter(subject => subject.teacher);
     }
     async getAllPopulated() {
         const subjects = await Subject.find().populate("teacher");
-        return subjects;
+        return subjects.filter(subject => subject.teacher);
     }
     async getOne(id) {
         const subject = await Subject.findById(id).populate("teacher");
         if (!subject) throw boom.notFound("Subject not found");
-        return subject;
+        return subject.filter(subject => subject.teacher);
     }
 
     async search(query) {
