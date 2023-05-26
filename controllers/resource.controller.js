@@ -13,7 +13,7 @@ class ResourceController {
     async getOne(id) {
         const resource = await Resource.findById(id).populate('user').populate('subject');
         if(!resource) throw boom.notFound('Resource not found');
-        return resource.filter(resource => resource.user && resource.subject);
+        return resource.user && resource.subject ? resource : null;
     }
     async getBySubjectId(subjectId) {
         const resources = await Resource.find({subject: subjectId}).populate('user');

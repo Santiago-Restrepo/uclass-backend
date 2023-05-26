@@ -89,7 +89,7 @@ class ReviewController {
         //Populate user and subject
         const review  = await Review.findById(id).populate('user').populate('subject');
         if (!review) throw boom.notFound('Review not found');
-        return review.filter(review => review.user && review.subject);
+        return review.user && review.subject ? review : null;
     }
 
     async getByUserId(userId) {
