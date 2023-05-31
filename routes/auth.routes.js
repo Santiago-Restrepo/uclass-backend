@@ -17,20 +17,23 @@ router.post("/signup", async (req, res, next) => {
 
 router.post("/signin", async (req, res, next) => {
     try {
-        const {user} = req.body;
-        const data = await authController.signIn(user);
-        
-        //Set cookie
-        //Frontend domain: frontend.uclass.space
-        //Backend domain: backend.uclass.space
+        const {user, token} = req.body;
         const cookieDomain = process.env.NODE_ENV === 'production' ? '.uclass.space' : 'localhost';
+        let data = {};
+        if(token){
+            data = await authController.signInwithToken(token);
+        }else{
+            data = await authController.signIn(user);   
+            //Set cookie
+            //Frontend domain: frontend.uclass.space
+            //Backend domain: backend.uclass.space
+        }
         res.cookie('token', data.token, {
             httpOnly: true,
             secure: true,
             sameSite: 'none',
             domain: cookieDomain
         });
-        
 
         res.status(200).json({
             ...data,

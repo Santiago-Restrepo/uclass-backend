@@ -102,6 +102,27 @@ class AuthController{
             name: userFound.name
         };
     }
+    async signInwithToken(token){
+        if(!token){
+            throw boom.badRequest("Token not found");
+        }
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const {id} = decoded;
+        const userFound = await User.findById(id).populate("roles");
+        if(!userFound){
+            throw boom.badRequest("User not found");
+        }
+        const newToken = this.jwtSignUser({
+            id: userFound._id,
+            name: userFound.name,
+            email: userFound.email,
+            roles: userFound.roles.map(role => role.name)
+        });
+        return {
+            token: newToken,
+            name: userFound.name
+        };
+    }
     async googleLogin(user){
         if(!user){
             throw boom.unauthorized("User not found");
