@@ -25,7 +25,7 @@ class ResourceController {
     }
     
     async getByUserId(userId) {
-        const resources = await Resource.find({userId: userId}).populate('subject');
+        const resources = await Resource.find({user: userId}).populate('subject');
         return resources.filter(resource => resource.subject);
     }
     

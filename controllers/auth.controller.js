@@ -15,7 +15,6 @@ class AuthController{
             return this.roles;
         }
         const roles = await Role.find();
-        console.log(roles);
         return roles;
     }
     jwtSignUser(user){
@@ -30,7 +29,6 @@ class AuthController{
         }
         const {name, email, password, repeatPassword} = user;
         if(!name || !email || !password || !repeatPassword) {
-            console.log(name, email, password, repeatPassword);
             throw boom.badRequest("All fields are required");
         }
         if(password !== repeatPassword){
